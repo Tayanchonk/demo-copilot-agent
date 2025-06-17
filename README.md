@@ -78,6 +78,18 @@ npm run dev
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
+- `npm run deploy` - Build the application for deployment
+
+### Deployment
+
+This application is configured for automatic deployment to GitHub Pages. The deployment happens automatically when changes are pushed to the `main` branch.
+
+**Live Demo:** [https://tayanchonk.github.io/demo-copilot-agent/](https://tayanchonk.github.io/demo-copilot-agent/)
+
+The deployment process:
+1. Uses GitHub Actions to build the application
+2. Deploys the built static files to GitHub Pages
+3. The site is available at the URL above
 
 ## Features Overview
 
