@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { fetchProductById, deleteProduct, clearSelectedProduct } from '../../store/productsSlice';
 import Button from '../../components/ui/Button';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
+import { formatPrice, formatDateTime } from '../../utils/formatters';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
@@ -40,23 +41,6 @@ const ProductDetail = () => {
         toast.error(error as string);
       }
     }
-  };
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(price);
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
   };
 
   if (loading) {
@@ -159,13 +143,13 @@ const ProductDetail = () => {
             <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">Created</dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {formatDate(selectedProduct.createdAt)}
+                {formatDateTime(selectedProduct.createdAt)}
               </dd>
             </div>
             <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">Last Updated</dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {formatDate(selectedProduct.updatedAt)}
+                {formatDateTime(selectedProduct.updatedAt)}
               </dd>
             </div>
           </dl>

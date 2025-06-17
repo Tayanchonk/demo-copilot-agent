@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../hooks/redux';
 import Button from '../components/ui/Button';
+import { formatPrice } from '../utils/formatters';
 
 const Home = () => {
   const { products } = useAppSelector((state) => state.products);
@@ -10,13 +11,6 @@ const Home = () => {
     inStock: products.filter(p => p.inStock).length,
     outOfStock: products.filter(p => !p.inStock).length,
     totalValue: products.reduce((sum, p) => sum + p.price, 0),
-  };
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(price);
   };
 
   return (

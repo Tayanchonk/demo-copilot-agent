@@ -5,6 +5,7 @@ import { fetchProducts, deleteProduct, clearError } from '../../store/productsSl
 import type { Product } from '../../types';
 import Button from '../../components/ui/Button';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
+import { formatPrice, formatDate } from '../../utils/formatters';
 import toast from 'react-hot-toast';
 
 const ProductList = () => {
@@ -31,21 +32,6 @@ const ProductList = () => {
         toast.error(error as string);
       }
     }
-  };
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(price);
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
   };
 
   if (loading) {

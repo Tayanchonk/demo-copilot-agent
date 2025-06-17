@@ -1,10 +1,16 @@
 import { Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
 
 const Header = () => {
   const location = useLocation();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const isActive = (path: string) => {
     return location.pathname === path;
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
   return (
@@ -49,13 +55,52 @@ const Header = () => {
           
           {/* Mobile menu button */}
           <div className="md:hidden">
-            <button className="text-white hover:text-blue-200">
+            <button 
+              className="text-white hover:text-blue-200"
+              onClick={toggleMobileMenu}
+              aria-label="Toggle mobile menu"
+            >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
           </div>
         </div>
+        
+        {/* Mobile menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden py-4 border-t border-blue-500">
+            <div className="flex flex-col space-y-2">
+              <Link
+                to="/"
+                className={`block py-2 px-3 rounded hover:bg-blue-500 transition-colors ${
+                  isActive('/') ? 'bg-blue-500' : ''
+                }`}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Home
+              </Link>
+              <Link
+                to="/products"
+                className={`block py-2 px-3 rounded hover:bg-blue-500 transition-colors ${
+                  isActive('/products') ? 'bg-blue-500' : ''
+                }`}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Products
+              </Link>
+              <Link
+                to="/products/create"
+                className={`block py-2 px-3 rounded bg-blue-500 hover:bg-blue-400 transition-colors ${
+                  isActive('/products/create') ? 'bg-blue-400' : ''
+                }`}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Add Product
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </header>
   );

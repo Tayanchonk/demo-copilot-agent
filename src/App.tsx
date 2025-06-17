@@ -8,6 +8,7 @@ import ProductList from './pages/products/ProductList';
 import ProductDetail from './pages/products/ProductDetail';
 import CreateProduct from './pages/products/CreateProduct';
 import EditProduct from './pages/products/EditProduct';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/products/create" element={<CreateProduct />} />
             <Route path="/products/:id" element={<ProductDetail />} />
             <Route path="/products/:id/edit" element={<EditProduct />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
         <Toaster
