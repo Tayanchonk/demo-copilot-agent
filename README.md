@@ -78,6 +78,13 @@ npm run dev
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
+- `npm run deploy` - Deploy to GitHub Pages
+
+## Live Demo
+
+🌐 **[View Live Application](https://Tayanchonk.github.io/demo-copilot-agent/)**
+
+This application is automatically deployed to GitHub Pages from the main branch.
 
 ## Features Overview
 
