@@ -13,7 +13,7 @@ import NotFound from './pages/NotFound';
 function App() {
   return (
     <Provider store={store}>
-      <Router>
+      <Router basename="/demo-copilot-agent">
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
