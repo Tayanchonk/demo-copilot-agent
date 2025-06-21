@@ -1,6 +1,20 @@
+/**
+ * @fileoverview Product Service - Mock API service for product CRUD operations
+ * 
+ * This service simulates a real REST API with realistic delays, error scenarios,
+ * and data persistence during the session. It provides all CRUD operations
+ * for product management with proper error handling and response formatting.
+ * 
+ * @author Demo Copilot Agent Team
+ * @version 1.0.0
+ */
+
 import type { Product, CreateProductData, UpdateProductData, ApiResponse } from '../types';
 
-// Mock data
+/**
+ * Mock product data for development and testing
+ * Contains sample products with realistic data structure
+ */
 const mockProducts: Product[] = [
   {
     id: '1',
@@ -54,14 +68,46 @@ const mockProducts: Product[] = [
   },
 ];
 
-// Helper function to simulate network delay
+/**
+ * Simulates network delay for realistic API behavior
+ * @param ms - Milliseconds to delay
+ * @returns Promise that resolves after the specified delay
+ */
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-// Helper function to generate random ID
+/**
+ * Generates a random unique identifier for new products
+ * @returns A random string ID
+ */
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
+/**
+ * Mock Product Service Class
+ * 
+ * Simulates a REST API service with all CRUD operations for products.
+ * Includes realistic features like:
+ * - Network delays (500-1000ms)
+ * - Random error scenarios (5-10% failure rate)
+ * - Data validation
+ * - Proper response formatting
+ * - Session-persistent data storage
+ */
 class MockProductService {
+  /** Private in-memory storage for products during session */
   private products: Product[] = [...mockProducts];
+
+  /**
+   * Retrieves all products from the mock database
+   * 
+   * @returns Promise<ApiResponse<Product[]>> - Array of all products with metadata
+   * @throws Error when simulated network failure occurs (10% chance)
+   * 
+   * @example
+   * ```typescript
+   * const response = await productService.getAllProducts();
+   * console.log(response.data); // Array of products
+   * ```
+   */
 
   async getAllProducts(): Promise<ApiResponse<Product[]>> {
     await delay(800); // Simulate network delay
@@ -78,6 +124,19 @@ class MockProductService {
     };
   }
 
+  /**
+   * Retrieves a single product by its unique identifier
+   * 
+   * @param id - The unique product identifier
+   * @returns Promise<ApiResponse<Product>> - Single product with metadata
+   * @throws Error when product with given ID is not found
+   * 
+   * @example
+   * ```typescript
+   * const response = await productService.getProductById('1');
+   * console.log(response.data.name); // Product name
+   * ```
+   */
   async getProductById(id: string): Promise<ApiResponse<Product>> {
     await delay(500);
     
@@ -94,6 +153,24 @@ class MockProductService {
     };
   }
 
+  /**
+   * Creates a new product in the mock database
+   * 
+   * @param productData - Product creation data (without id, timestamps)
+   * @returns Promise<ApiResponse<Product>> - Created product with generated ID and timestamps
+   * @throws Error when validation fails or simulated server error occurs (5% chance)
+   * 
+   * @example
+   * ```typescript
+   * const newProduct = await productService.createProduct({
+   *   name: 'New Product',
+   *   description: 'A great product',
+   *   price: 99.99,
+   *   category: 'Electronics',
+   *   inStock: true
+   * });
+   * ```
+   */
   async createProduct(productData: CreateProductData): Promise<ApiResponse<Product>> {
     await delay(1000);
     
@@ -123,6 +200,22 @@ class MockProductService {
     };
   }
 
+  /**
+   * Updates an existing product in the mock database
+   * 
+   * @param productData - Product update data including ID and fields to update
+   * @returns Promise<ApiResponse<Product>> - Updated product with new timestamp
+   * @throws Error when product with given ID is not found or server error occurs (5% chance)
+   * 
+   * @example
+   * ```typescript
+   * const updated = await productService.updateProduct({
+   *   id: '1',
+   *   name: 'Updated Product Name',
+   *   price: 199.99
+   * });
+   * ```
+   */
   async updateProduct(productData: UpdateProductData): Promise<ApiResponse<Product>> {
     await delay(800);
     
@@ -152,6 +245,19 @@ class MockProductService {
     };
   }
 
+  /**
+   * Deletes a product from the mock database
+   * 
+   * @param id - The unique identifier of the product to delete
+   * @returns Promise<ApiResponse<void>> - Success response with no data
+   * @throws Error when product with given ID is not found or server error occurs (5% chance)
+   * 
+   * @example
+   * ```typescript
+   * await productService.deleteProduct('1');
+   * console.log('Product deleted successfully');
+   * ```
+   */
   async deleteProduct(id: string): Promise<ApiResponse<void>> {
     await delay(600);
     
@@ -176,4 +282,16 @@ class MockProductService {
   }
 }
 
+/**
+ * Singleton instance of the MockProductService
+ * 
+ * This is the main export that should be used throughout the application
+ * for all product-related API operations.
+ * 
+ * @example
+ * ```typescript
+ * import { productService } from '../services/productService';
+ * const products = await productService.getAllProducts();
+ * ```
+ */
 export const productService = new MockProductService();
