@@ -43,6 +43,14 @@ src/
 ├── store/               # Redux store and slices
 ├── types/               # TypeScript type definitions
 └── utils/               # Utility functions
+
+# Configuration Files
+├── netlify.toml         # Netlify deployment configuration
+├── vite.config.ts       # Vite build configuration
+├── tailwind.config.js   # Tailwind CSS configuration
+├── eslint.config.js     # ESLint configuration
+└── public/
+    └── _redirects       # Netlify redirect rules for React Router
 ```
 
 ## Getting Started
@@ -80,11 +88,74 @@ npm run dev
 - `npm run lint` - Run ESLint
 - `npm run deploy` - Deploy to GitHub Pages
 
-## Live Demo
+## Deployment
+
+This application supports deployment to both GitHub Pages and Netlify.
+
+### GitHub Pages Deployment
 
 🌐 **[View Live Application](https://Tayanchonk.github.io/demo-copilot-agent/)**
 
-This application is automatically deployed to GitHub Pages from the main branch.
+The application is automatically deployed to GitHub Pages from the main branch using GitHub Actions.
+
+### Netlify Deployment
+
+#### Prerequisites
+- A [Netlify account](https://netlify.com) (free tier available)
+- Access to this GitHub repository
+
+#### Setup Instructions
+
+1. **Connect Repository to Netlify**
+   - Log in to your Netlify account
+   - Click "New site from Git"
+   - Choose GitHub and authorize Netlify
+   - Select the `Tayanchonk/demo-copilot-agent` repository
+
+2. **Configure Build Settings**
+   - **Build command:** `npm run build`
+   - **Publish directory:** `dist`
+   - **Node.js version:** `18` (configured in `netlify.toml`)
+
+3. **Environment Variables**
+   - No custom environment variables are required for basic deployment
+   - The application automatically detects Netlify environment via the `NETLIFY` environment variable
+
+4. **Deploy**
+   - Click "Deploy site"
+   - Netlify will automatically build and deploy your application
+   - You'll receive a random subdomain URL (e.g., `amazing-app-123456.netlify.app`)
+
+#### Features Included
+
+- ✅ **Automatic Deployment**: Pushes to the main branch trigger new deployments
+- ✅ **React Router Support**: `_redirects` file ensures client-side routing works
+- ✅ **Performance Optimized**: Proper caching headers for static assets
+- ✅ **Security Headers**: HTTPS by default with security headers configured
+- ✅ **Environment Detection**: Application automatically adapts routing for Netlify
+
+#### Custom Domain (Optional)
+
+To use a custom domain:
+1. Go to your Netlify site dashboard
+2. Navigate to "Domain management"
+3. Click "Add custom domain"
+4. Follow the DNS configuration instructions
+
+#### Continuous Deployment
+
+The application is configured for continuous deployment:
+- Changes pushed to the main branch automatically trigger new builds
+- Build status is visible in the Netlify dashboard
+- Failed builds will not be deployed, ensuring site stability
+
+## Live Demo
+
+🌐 **[View Live Application on GitHub Pages](https://Tayanchonk.github.io/demo-copilot-agent/)**
+
+The application is available on multiple platforms:
+- **GitHub Pages**: Automatically deployed from the main branch
+- **Netlify**: Ready for deployment with the configuration provided above
 
 ## Features Overview
 

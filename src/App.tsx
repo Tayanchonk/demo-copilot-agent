@@ -11,9 +11,12 @@ import EditProduct from './pages/products/EditProduct';
 import NotFound from './pages/NotFound';
 
 function App() {
+  // Use appropriate basename based on deployment environment
+  const basename = import.meta.env.NETLIFY ? '/' : '/demo-copilot-agent';
+  
   return (
     <Provider store={store}>
-      <Router basename="/demo-copilot-agent">
+      <Router basename={basename}>
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
