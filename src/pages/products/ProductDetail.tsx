@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { fetchProductById, deleteProduct, clearSelectedProduct } from '../../store/productsSlice';
 import Button from '../../components/ui/Button';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
+import ConfirmDialog from '../../components/ui/ConfirmDialog';
 import { formatPrice, formatDateTime } from '../../utils/formatters';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +14,7 @@ const ProductDetail = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { selectedProduct, loading, error } = useAppSelector((state) => state.products);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -29,18 +31,26 @@ const ProductDetail = () => {
     }
   }, [error]);
 
-  const handleDelete = async () => {
+  const handleDelete = () => {
+    setShowDeleteDialog(true);
+  };
+
+  const handleConfirmDelete = async () => {
     if (!selectedProduct) return;
     
-    if (window.confirm(`Are you sure you want to delete "${selectedProduct.name}"?`)) {
-      try {
-        await dispatch(deleteProduct(selectedProduct.id)).unwrap();
-        toast.success('Product deleted successfully');
-        navigate('/products');
-      } catch (error) {
-        toast.error(error as string);
-      }
+    try {
+      await dispatch(deleteProduct(selectedProduct.id)).unwrap();
+      toast.success('Product deleted successfully');
+      navigate('/products');
+    } catch (error) {
+      toast.error(error as string);
+    } finally {
+      setShowDeleteDialog(false);
     }
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteDialog(false);
   };
 
   if (loading) {
@@ -164,6 +174,17 @@ const ProductDetail = () => {
           </Button>
         </div>
       </div>
+
+      <ConfirmDialog
+        isOpen={showDeleteDialog}
+        title="Delete Product"
+        message={`Are you sure you want to delete "${selectedProduct?.name}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        confirmVariant="danger"
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </div>
   );
 };

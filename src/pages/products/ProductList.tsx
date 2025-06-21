@@ -1,16 +1,19 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { fetchProducts, deleteProduct, clearError } from '../../store/productsSlice';
 import type { Product } from '../../types';
 import Button from '../../components/ui/Button';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
+import ConfirmDialog from '../../components/ui/ConfirmDialog';
 import { formatPrice, formatDate } from '../../utils/formatters';
 import toast from 'react-hot-toast';
 
 const ProductList = () => {
   const dispatch = useAppDispatch();
   const { products, loading, error } = useAppSelector((state) => state.products);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [productToDelete, setProductToDelete] = useState<Product | null>(null);
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -23,15 +26,28 @@ const ProductList = () => {
     }
   }, [error, dispatch]);
 
-  const handleDelete = async (product: Product) => {
-    if (window.confirm(`Are you sure you want to delete "${product.name}"?`)) {
-      try {
-        await dispatch(deleteProduct(product.id)).unwrap();
-        toast.success('Product deleted successfully');
-      } catch (error) {
-        toast.error(error as string);
-      }
+  const handleDelete = (product: Product) => {
+    setProductToDelete(product);
+    setShowDeleteDialog(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!productToDelete) return;
+    
+    try {
+      await dispatch(deleteProduct(productToDelete.id)).unwrap();
+      toast.success('Product deleted successfully');
+    } catch (error) {
+      toast.error(error as string);
+    } finally {
+      setShowDeleteDialog(false);
+      setProductToDelete(null);
     }
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteDialog(false);
+    setProductToDelete(null);
   };
 
   if (loading) {
@@ -144,6 +160,17 @@ const ProductList = () => {
           </ul>
         </div>
       )}
+
+      <ConfirmDialog
+        isOpen={showDeleteDialog}
+        title="Delete Product"
+        message={`Are you sure you want to delete "${productToDelete?.name}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        confirmVariant="danger"
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </div>
   );
 };
