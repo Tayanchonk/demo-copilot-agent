@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import type { CreateProductData } from '../../types';
 import Button from '../ui/Button';
+import SelectInput, { type Option } from '../ui/SelectInput';
 
 interface ProductFormProps {
   initialData?: Partial<CreateProductData>;
@@ -18,6 +19,7 @@ const ProductForm = ({
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<CreateProductData>({
     defaultValues: initialData,
@@ -33,6 +35,11 @@ const ProductForm = ({
     'Health & Beauty',
     'Toys',
   ];
+
+  const categoryOptions: Option[] = categories.map((category) => ({
+    value: category,
+    label: category,
+  }));
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -117,28 +124,15 @@ const ProductForm = ({
       </div>
 
       <div>
-        <label htmlFor="category" className="block text-sm font-medium text-gray-700">
-          Category *
-        </label>
-        <select
-          id="category"
-          {...register('category', {
-            required: 'Category is required',
-          })}
-          className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm ${
-            errors.category ? 'border-red-300' : ''
-          }`}
-        >
-          <option value="">Select a category</option>
-          {categories.map((category) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
-        {errors.category && (
-          <p className="mt-1 text-sm text-red-600">{errors.category.message}</p>
-        )}
+        <SelectInput
+          name="category"
+          control={control}
+          options={categoryOptions}
+          label="Category"
+          placeholder="Select a category"
+          required
+          error={errors.category?.message}
+        />
       </div>
 
       <div className="flex items-center">
